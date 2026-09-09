@@ -1,0 +1,19 @@
+@if (variant === 'spinner') {
+  <div class="flex items-center justify-center gap-3 py-16 text-tide-600" role="status" aria-live="polite">
+    <svg class="h-6 w-6 animate-spin" viewBox="0 0 24 24" fill="none">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+      <path class="opacity-90" d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+    </svg>
+    <span class="text-sm font-medium text-slate-500">Loading…</span>
+  </div>
+} @else {
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" role="status" aria-label="Loading products">
+    @for (i of skeletons; track i) {
+      <div class="animate-pulse rounded-2xl bg-white p-3 shadow-sm">
+        <div class="mb-3 aspect-square rounded-xl bg-slate-200"></div>
+        <div class="mb-2 h-3 w-2/3 rounded bg-slate-200"></div>
+        <div class="h-3 w-1/3 rounded bg-slate-200"></div>
+      </div>
+    }
+  </div>
+}

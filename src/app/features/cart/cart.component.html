@@ -1,0 +1,64 @@
+<div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+  <h1 class="font-display text-3xl font-semibold text-abyss-900">Your Cart</h1>
+
+  @if (cartSvc.items().length === 0) {
+    <div class="mt-10">
+      <app-empty-state icon="cart" title="Your cart is empty" description="Looks like you haven't added anything yet." actionLabel="Continue Shopping" [actionLink]="['/products']" />
+    </div>
+  } @else {
+    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div class="space-y-4 lg:col-span-2">
+        @for (item of cartSvc.items(); track item.productId) {
+          <div class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
+            <img [src]="item.image" [alt]="item.name" class="h-20 w-20 shrink-0 rounded-xl object-cover" />
+            <div class="min-w-0 flex-1">
+              <p class="line-clamp-1 font-display text-sm font-semibold text-abyss-900">{{ item.name }}</p>
+              <p class="text-xs text-slate-400">SKU: {{ item.sku }}</p>
+              <p class="mt-1 text-sm font-semibold text-tide-600">{{ item.unitPrice | currency:'INR':'Rs. ' }}</p>
+            </div>
+            <app-quantity-selector [value]="item.quantity" [max]="item.maxQuantity" (valueChange)="updateQuantity(item.productId, $event)" />
+            <p class="w-20 shrink-0 text-right text-sm font-bold text-abyss-900">{{ item.unitPrice * item.quantity | currency:'INR':'Rs. ' }}</p>
+            <button type="button" (click)="remove(item.productId)" class="shrink-0 text-slate-400 transition hover:text-red-500" aria-label="Remove item">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-.8 12.2A2 2 0 0 1 14.2 21H9.8a2 2 0 0 1-2-1.8L7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        }
+        <div class="flex items-center justify-between pt-2">
+          <a routerLink="/products" class="text-sm font-semibold text-tide-600 hover:text-tide-700">← Continue Shopping</a>
+          <button type="button" (click)="clearCart()" class="text-sm font-semibold text-slate-400 hover:text-red-500">Clear Cart</button>
+        </div>
+      </div>
+
+      <!-- summary -->
+      <div class="h-fit rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100">
+        <h2 class="font-display text-lg font-semibold text-abyss-900">Order Summary</h2>
+
+        <div class="mt-4 flex gap-2">
+          <input type="text" [(ngModel)]="couponCode" placeholder="Coupon code"
+            class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          <button type="button" (click)="applyCoupon()" class="shrink-0 rounded-xl bg-abyss-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-abyss-800">Apply</button>
+        </div>
+        @if (appliedCode) {
+          <p class="mt-2 text-xs font-medium text-tide-600">Coupon "{{ appliedCode }}" applied</p>
+        }
+
+        <dl class="mt-6 space-y-3 border-t border-slate-100 pt-4 text-sm">
+          <div class="flex justify-between"><dt class="text-slate-500">Subtotal</dt><dd class="font-medium text-abyss-900">{{ cartSvc.subtotal() | currency:'INR':'Rs. ' }}</dd></div>
+          @if (appliedDiscount > 0) {
+            <div class="flex justify-between"><dt class="text-slate-500">Discount</dt><dd class="font-medium text-red-500">-{{ appliedDiscount | currency:'INR':'Rs. ' }}</dd></div>
+          }
+          <div class="flex justify-between"><dt class="text-slate-500">Shipping</dt><dd class="font-medium text-abyss-900">{{ shippingFee() === 0 ? 'Free' : (shippingFee() | currency:'INR':'Rs. ') }}</dd></div>
+          <div class="flex justify-between"><dt class="text-slate-500">Tax</dt><dd class="font-medium text-abyss-900">{{ tax() | currency:'INR':'Rs. ' }}</dd></div>
+        </dl>
+        <div class="mt-4 flex justify-between border-t border-slate-100 pt-4">
+          <span class="font-display text-base font-semibold text-abyss-900">Grand Total</span>
+          <span class="font-display text-base font-semibold text-abyss-900">{{ grandTotal() | currency:'INR':'Rs. ' }}</span>
+        </div>
+
+        <a routerLink="/checkout" class="mt-6 flex items-center justify-center rounded-xl bg-tide-gradient py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-glow">
+          Proceed to Checkout
+        </a>
+      </div>
+    </div>
+  }
+</div>

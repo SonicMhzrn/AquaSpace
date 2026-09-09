@@ -1,0 +1,77 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="font-display text-2xl font-semibold text-abyss-900">Inventory</h1>
+    <p class="mt-1 text-sm text-slate-500">{{ inventorySvc.lowStockCount() }} low stock · {{ inventorySvc.outOfStockCount() }} out of stock</p>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Search by name or SKU…"
+      class="min-w-[240px] flex-1 rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+    <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none">
+      <option value="all">All Status</option>
+      <option value="In Stock">In Stock</option>
+      <option value="Low Stock">Low Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+  </div>
+
+  <div class="overflow-x-auto rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+    <table class="w-full min-w-[700px] text-left text-sm">
+      <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-400">
+        <tr>
+          <th class="px-4 py-3 font-medium">Product</th>
+          <th class="px-4 py-3 font-medium">SKU</th>
+          <th class="px-4 py-3 font-medium">Stock</th>
+          <th class="px-4 py-3 font-medium">Minimum Stock</th>
+          <th class="px-4 py-3 font-medium">Status</th>
+          <th class="px-4 py-3 font-medium text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (row of filtered(); track row.product.id) {
+          <tr class="transition hover:bg-slate-50">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                <img [src]="row.product.images[0]" [alt]="row.product.name" class="h-9 w-9 rounded-lg object-cover" />
+                <span class="line-clamp-1 font-medium text-abyss-900">{{ row.product.name }}</span>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-slate-500">{{ row.product.sku }}</td>
+            <td class="px-4 py-3">
+              @if (editingId() === row.product.id) {
+                <input type="number" [(ngModel)]="draftQuantity" class="w-20 rounded-lg border border-slate-200 px-2 py-1 text-sm focus:border-tide-400 focus:outline-none" />
+              } @else {
+                {{ row.product.stockQuantity }}
+              }
+            </td>
+            <td class="px-4 py-3">
+              @if (editingId() === row.product.id) {
+                <input type="number" [(ngModel)]="draftMinimum" class="w-20 rounded-lg border border-slate-200 px-2 py-1 text-sm focus:border-tide-400 focus:outline-none" />
+              } @else {
+                {{ row.product.minimumStock }}
+              }
+            </td>
+            <td class="px-4 py-3">
+              <span class="rounded-full px-2.5 py-1 text-xs font-semibold"
+                [class.bg-green-50]="row.status === 'In Stock'" [class.text-green-700]="row.status === 'In Stock'"
+                [class.bg-amber-50]="row.status === 'Low Stock'" [class.text-amber-700]="row.status === 'Low Stock'"
+                [class.bg-red-50]="row.status === 'Out of Stock'" [class.text-red-600]="row.status === 'Out of Stock'">
+                {{ row.status }}
+              </span>
+            </td>
+            <td class="px-4 py-3 text-right">
+              @if (editingId() === row.product.id) {
+                <div class="flex justify-end gap-2">
+                  <button type="button" (click)="save(row.product.id, row.product.name)" class="rounded-lg bg-tide-gradient px-3 py-1.5 text-xs font-semibold text-white shadow">Save</button>
+                  <button type="button" (click)="cancelEdit()" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-500">Cancel</button>
+                </div>
+              } @else {
+                <button type="button" (click)="startEdit(row.product.id, row.product.stockQuantity, row.product.minimumStock)" class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50">Adjust Stock</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

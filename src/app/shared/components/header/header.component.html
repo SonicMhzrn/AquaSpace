@@ -1,0 +1,195 @@
+<header class="sticky top-0 z-50 border-b border-white/5 bg-[#0B0D10] backdrop-blur">
+  <!-- top utility bar -->
+  <div class="hidden bg-[#0B0D10] text-white/70 sm:block">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs sm:px-6 lg:px-8">
+      <p>Free shipping on orders over Rs. 2000</p>
+      <div class="flex items-center gap-4">
+        <a routerLink="/fish-care" class="transition hover:text-tide-300">Fish Care Library</a>
+        <a routerLink="/contact" class="transition hover:text-tide-300">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3.5 sm:px-6 lg:px-8">
+    <!-- mobile menu button -->
+    <button type="button" (click)="toggleMobileMenu()" class="text-white lg:hidden" aria-label="Open menu">
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <!-- logo -->
+    <a routerLink="/" class="flex items-center gap-2 shrink-0" aria-label="Home">
+      <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-tide-gradient text-white shadow-glow">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M3 12c3-4 7-6 11-6 3.5 0 6 2 7 3-1 1-3.5 3-7 3-4 0-8-2-11-6 3 5 5 8 5 8s-2 3-5 8c3-4 7-6 11-6 3.5 0 6 2 7 3-1 1-3.5 3-7 3-4 0-8-2-11-6z"
+            opacity="0" />
+          <path d="M2 12s3.5-5.5 9-5.5c3 0 6.5 1.7 9 4.2.7.6.7 1.6 0 2.2-2.5 2.5-6 4.1-9 4.1-5.5 0-9-5-9-5z" />
+          <circle cx="16.3" cy="10.8" r="1" fill="#04101f" />
+        </svg>
+      </span>
+      <span class="font-display text-xl font-semibold text-white">AquaShop</span>
+    </a>
+
+    <!-- desktop nav -->
+    <nav class="ml-2 hidden items-center gap-1 lg:flex">
+      <div class="relative" (mouseenter)="categoryMenuOpen.set(true)" (mouseleave)="categoryMenuOpen.set(false)">
+        <button type="button"
+          class="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition hover:text-tide-300">
+          Shop
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 8l5 5 5-5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        @if (categoryMenuOpen()) {
+        <div class="absolute left-0 top-full w-64 rounded-2xl border border-slate-100 bg-white p-2 shadow-deep">
+          @for (cat of categorySvc.topLevelCategories(); track cat.id) {
+          <a [routerLink]="['/category', cat.slug]"
+            class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">
+            <img [src]="cat.image" [alt]="cat.name" class="h-8 w-8 rounded-lg object-cover" />
+            {{ cat.name }}
+          </a>
+          }
+        </div>
+        }
+      </div>
+      <a routerLink="/products" routerLinkActive="text-tide-300"
+        class="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition hover:text-tide-300">All Products</a>
+      <a routerLink="/offers" routerLinkActive="text-tide-300"
+        class="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition hover:text-tide-300">Offers</a>
+      <a routerLink="/blog" routerLinkActive="text-tide-300"
+        class="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition hover:text-tide-300">Blog</a>
+      <a routerLink="/about" routerLinkActive="text-tide-300"
+        class="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition hover:text-tide-300">About</a>
+    </nav>
+
+    <!-- search -->
+    <div class="ml-auto hidden max-w-md flex-1 md:block">
+      <app-search-bar />
+    </div>
+
+    <!-- icons -->
+    <div class="ml-auto flex items-center gap-1 md:ml-4">
+      <a routerLink="/wishlist"
+        class="group relative flex h-10 w-10 items-center justify-center rounded-xl text-white/90 transition hover:bg-white/10"
+        aria-label="Wishlist">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+        </svg>
+        @if (wishlistSvc.count() > 0) {
+        <span
+          class="absolute -right-0.5 -top-0.5 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-tide-500 text-[10px] font-bold text-white">{{
+          wishlistSvc.count() }}</span>
+        }
+        <span
+          class="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+          Wishlist
+        </span>
+      </a>
+      <a routerLink="/cart"
+        class="group relative flex h-10 w-10 items-center justify-center rounded-xl text-white/90 transition hover:bg-white/10"
+        aria-label="Cart">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="17" cy="21" r="1" />
+        </svg>
+        @if (cartSvc.itemCount() > 0) {
+        <span
+          class="absolute -right-0.5 -top-0.5 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-tide-500 text-[10px] font-bold text-white">{{
+          cartSvc.itemCount() }}</span>
+        }
+        <span
+          class="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+          Cart
+        </span>
+      </a>
+
+      <div class="relative" (mouseenter)="accountMenuOpen.set(true)" (mouseleave)="accountMenuOpen.set(false)">
+        <button type="button"
+          class="group relative flex h-10 w-10 items-center justify-center rounded-xl text-white/90 transition hover:bg-white/10"
+          aria-label="Account">
+          @if (authSvc.session()?.avatar) {
+          <img [src]="authSvc.session()?.avatar" alt="" class="h-7 w-7 rounded-full object-cover" />
+          } @else {
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="12" cy="8" r="3.2" />
+            <path d="M4.5 19.5c1.5-3.5 4.5-5 7.5-5s6 1.5 7.5 5" stroke-linecap="round" />
+          </svg>
+          }
+          @if (!accountMenuOpen()) {
+          <span
+            class="pointer-events-none absolute top-full left-1/2 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+            Account
+          </span>
+          }
+        </button>
+        @if (accountMenuOpen()) {
+        <div class="absolute right-0 top-full w-52 rounded-2xl border border-slate-100 bg-white p-2 shadow-deep">
+          @if (authSvc.isAuthenticated()) {
+          <p class="px-3 py-1.5 text-xs text-slate-400">Signed in as</p>
+          <p class="mb-1 px-3 pb-1.5 text-sm font-semibold text-abyss-900">{{ authSvc.session()?.firstName }}</p>
+          @if (authSvc.isAdmin()) {
+          <a routerLink="/admin/dashboard"
+            class="block rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">Admin Dashboard</a>
+          }
+          <a routerLink="/profile"
+            class="block rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">My Profile</a>
+          <a routerLink="/orders"
+            class="block rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">My Orders</a>
+          <button type="button" (click)="logout()"
+            class="block w-full rounded-xl px-3 py-2 text-left text-sm text-red-600 transition hover:bg-red-50">Logout</button>
+          } @else {
+          <a routerLink="/login"
+            class="block rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">Login</a>
+          <a routerLink="/register"
+            class="block rounded-xl px-3 py-2 text-sm text-abyss-900 transition hover:bg-tide-50">Register</a>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- mobile search -->
+  <div class="px-4 pb-3 md:hidden">
+    <app-search-bar />
+  </div>
+
+  <!-- mobile drawer -->
+  @if (mobileMenuOpen()) {
+  <div class="fixed inset-0 z-40 bg-abyss-950/60 lg:hidden" (click)="closeMobileMenu()"></div>
+  <nav class="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-abyss-900 p-5 shadow-deep lg:hidden">
+    <div class="mb-6 flex items-center justify-between">
+      <span class="font-display text-lg font-semibold text-white">Menu</span>
+      <button type="button" (click)="closeMobileMenu()" class="text-white/80" aria-label="Close menu">
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 5l10 10M15 5L5 15" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <div class="flex flex-col gap-1">
+      <a routerLink="/products" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">All Products</a>
+      @for (cat of categorySvc.topLevelCategories(); track cat.id) {
+      <a [routerLink]="['/category', cat.slug]" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">{{ cat.name }}</a>
+      }
+      <a routerLink="/offers" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">Offers</a>
+      <a routerLink="/blog" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">Blog</a>
+      <a routerLink="/fish-care" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">Fish Care</a>
+      <a routerLink="/about" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">About</a>
+      <a routerLink="/contact" (click)="closeMobileMenu()"
+        class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/90 hover:bg-white/10">Contact</a>
+    </div>
+  </nav>
+  }
+</header>

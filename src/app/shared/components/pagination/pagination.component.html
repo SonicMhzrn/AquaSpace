@@ -1,0 +1,25 @@
+@if (totalPages > 1) {
+  <nav class="flex items-center justify-center gap-1.5" aria-label="Pagination">
+    <button type="button" (click)="go(currentPage - 1)" [disabled]="currentPage === 1"
+      class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-tide-400 hover:text-tide-600 disabled:cursor-not-allowed disabled:opacity-40"
+      aria-label="Previous page">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    @for (p of pages(); track $index) {
+      @if (p === '...') {
+        <span class="px-2 text-sm text-slate-400">…</span>
+      } @else {
+        <button type="button" (click)="go(p)"
+          [class]="p === currentPage ? 'bg-tide-gradient text-white shadow-glow' : 'text-slate-600 hover:bg-slate-100'"
+          class="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition">
+          {{ p }}
+        </button>
+      }
+    }
+    <button type="button" (click)="go(currentPage + 1)" [disabled]="currentPage === totalPages"
+      class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:border-tide-400 hover:text-tide-600 disabled:cursor-not-allowed disabled:opacity-40"
+      aria-label="Next page">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </nav>
+}

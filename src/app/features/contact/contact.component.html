@@ -1,0 +1,45 @@
+<div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+  <div class="text-center">
+    <p class="text-sm font-medium text-tide-600">We're Here to Help</p>
+    <h1 class="mt-1 font-display text-3xl font-semibold text-abyss-900 sm:text-4xl">Contact Us</h1>
+  </div>
+
+  <div class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
+    <div class="space-y-6 lg:col-span-1">
+      <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <p class="text-xs font-semibold uppercase tracking-wide text-tide-600">Email</p>
+        <p class="mt-1 text-sm text-abyss-900">{{ settingsSvc.settings().email }}</p>
+      </div>
+      <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <p class="text-xs font-semibold uppercase tracking-wide text-tide-600">Phone</p>
+        <p class="mt-1 text-sm text-abyss-900">{{ settingsSvc.settings().phone }}</p>
+      </div>
+      <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <p class="text-xs font-semibold uppercase tracking-wide text-tide-600">Address</p>
+        <p class="mt-1 text-sm text-abyss-900">{{ settingsSvc.settings().address }}</p>
+      </div>
+      <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <p class="text-xs font-semibold uppercase tracking-wide text-tide-600">Business Hours</p>
+        <p class="mt-1 text-sm text-abyss-900">{{ settingsSvc.settings().businessHours }}</p>
+      </div>
+      <div class="aspect-video overflow-hidden rounded-2xl bg-slate-200">
+        <div class="flex h-full w-full items-center justify-center text-sm text-slate-400">Map placeholder</div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 lg:col-span-2">
+      <h2 class="font-display text-lg font-semibold text-abyss-900">Send Us a Message</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="mt-5 space-y-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <input type="text" formControlName="name" placeholder="Your name" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          <input type="email" formControlName="email" placeholder="Your email" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+        </div>
+        <input type="text" formControlName="subject" placeholder="Subject" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+        <textarea formControlName="message" rows="5" placeholder="How can we help?" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none"></textarea>
+        <button type="submit" [disabled]="submitting()" class="rounded-xl bg-tide-gradient px-6 py-2.5 text-sm font-semibold text-white shadow transition hover:shadow-glow disabled:opacity-60">
+          {{ submitting() ? 'Sending…' : 'Send Message' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="space-y-6">
+  <h1 class="font-display text-2xl font-semibold text-abyss-900">Orders</h1>
+
+  <div class="flex flex-wrap gap-3">
+    <input type="search" [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Search by order # or customer…"
+      class="min-w-[240px] flex-1 rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+    <select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none">
+      <option value="all">All Statuses</option>
+      @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
+    </select>
+  </div>
+
+  <div class="space-y-3">
+    @for (order of filtered(); track order.id) {
+      <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-100">
+        <button type="button" (click)="toggleExpand(order.id)" class="flex w-full flex-wrap items-center justify-between gap-3 px-5 py-4 text-left">
+          <div>
+            <p class="font-display text-sm font-semibold text-abyss-900">{{ order.orderNumber }}</p>
+            <p class="text-xs text-slate-400">{{ order.customerName }} · {{ order.placedAt | date: 'mediumDate' }}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="rounded-full px-3 py-1 text-xs font-semibold" [ngClass]="statusClasses(order.status)">{{ order.status }}</span>
+            <span class="font-display text-sm font-semibold text-abyss-900">{{ order.grandTotal | currency:'INR':'Rs. ' }}</span>
+            <svg class="h-4 w-4 text-slate-300 transition" [class.rotate-90]="expandedId() === order.id" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+
+        @if (expandedId() === order.id) {
+          <div class="border-t border-slate-100 px-5 py-4">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <h4 class="text-xs font-semibold uppercase tracking-wide text-slate-400">Items</h4>
+                <div class="mt-2 space-y-2">
+                  @for (item of order.items; track item.productId) {
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-abyss-900">{{ item.name }} × {{ item.quantity }}</span>
+                      <span class="text-slate-500">{{ item.lineTotal | currency:'INR':'Rs. ' }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
+              <div>
+                <h4 class="text-xs font-semibold uppercase tracking-wide text-slate-400">Shipping To</h4>
+                <p class="mt-2 text-sm text-slate-600">{{ order.shippingAddress.fullName }}</p>
+                <p class="text-sm text-slate-600">{{ order.shippingAddress.addressLine }}, {{ order.shippingAddress.city }}</p>
+                <p class="mt-2 text-xs text-slate-400">{{ order.deliveryMethod }} · {{ order.paymentMethod }} · {{ order.paymentStatus }}</p>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center gap-3 border-t border-slate-100 pt-4">
+              <label class="text-sm font-medium text-abyss-900">Update Status:</label>
+              <select [ngModel]="order.status" (ngModelChange)="updateStatus(order, $event)" class="rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-tide-400 focus:outline-none">
+                @for (s of statuses; track s) { <option [value]="s">{{ s }}</option> }
+              </select>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    @if (filtered().length === 0) {
+      <p class="py-10 text-center text-sm text-slate-400">No orders match your filters.</p>
+    }
+  </div>
+</div>

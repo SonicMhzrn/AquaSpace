@@ -1,0 +1,49 @@
+<div class="bg-abyss-950 py-12 text-center">
+  <p class="text-sm font-medium text-tide-300">Limited Time</p>
+  <h1 class="mt-1 font-display text-3xl font-semibold text-white sm:text-4xl">Offers &amp; Deals</h1>
+  <p class="mx-auto mt-2 max-w-xl px-4 text-sm text-slate-400">Flash sales, seasonal discounts, and bundles curated for your aquarium.</p>
+</div>
+
+<div class="mx-auto max-w-7xl space-y-14 px-4 py-10 sm:px-6 lg:px-8">
+  @if (couponOffers().length > 0) {
+    <section>
+      <h2 class="mb-4 font-display text-xl font-semibold text-abyss-900">Coupon Codes</h2>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        @for (offer of couponOffers(); track offer.id) {
+          <div class="flex items-center justify-between rounded-2xl border-2 border-dashed border-tide-300 bg-tide-50 p-5">
+            <div>
+              <p class="font-display text-base font-semibold text-abyss-900">{{ offer.title }}</p>
+              <p class="text-sm text-slate-600">{{ offer.description }}</p>
+            </div>
+            <button type="button" (click)="copyCoupon(offer.couponCode!)" class="shrink-0 rounded-xl bg-abyss-900 px-4 py-2 font-mono text-sm font-semibold text-white transition hover:bg-abyss-800">
+              {{ offer.couponCode }}
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  @if (nonCouponOffers().length === 0 && couponOffers().length === 0) {
+    <app-empty-state icon="box" title="No active offers right now" description="Check back soon for new deals." actionLabel="Browse Products" [actionLink]="['/products']" />
+  }
+
+  @for (offer of nonCouponOffers(); track offer.id) {
+    <section>
+      <div class="mb-5 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600 capitalize">{{ offer.type.replace('-', ' ') }}</p>
+          <h2 class="font-display text-xl font-semibold text-abyss-900">{{ offer.title }} — {{ offer.discountPercent }}% Off</h2>
+          <p class="mt-1 text-sm text-slate-500">{{ offer.description }}</p>
+        </div>
+      </div>
+      @if (productsForOffer(offer.id).length > 0) {
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          @for (p of productsForOffer(offer.id); track p!.id) {
+            <app-product-card [product]="p!" />
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

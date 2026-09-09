@@ -1,0 +1,15 @@
+<div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-tide-700 via-tide-600 to-tide-400 p-8 shadow-deep sm:p-12">
+  <div class="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl"></div>
+  <div class="absolute -bottom-14 -left-10 h-48 w-48 rounded-full bg-abyss-950/20 blur-2xl"></div>
+  <div class="relative z-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <div class="max-w-lg">
+      <p class="text-sm font-medium text-white/80">{{ banner.subtitle }}</p>
+      <h3 class="mt-1 font-display text-2xl font-semibold text-white sm:text-3xl">{{ banner.title }}</h3>
+      <p class="mt-2 text-sm text-white/85">{{ banner.description }}</p>
+    </div>
+    <a [routerLink]="banner.buttonLink"
+      class="inline-flex shrink-0 items-center justify-center rounded-xl bg-white px-6 py-3 font-semibold text-abyss-900 shadow-lg transition hover:-translate-y-0.5">
+      {{ banner.buttonText }}
+    </a>
+  </div>
+</div>

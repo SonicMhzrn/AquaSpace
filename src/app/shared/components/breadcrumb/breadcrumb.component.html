@@ -1,0 +1,17 @@
+<nav aria-label="Breadcrumb" class="text-sm">
+  <ol class="flex flex-wrap items-center gap-1.5 text-slate-500">
+    <li>
+      <a routerLink="/" class="transition hover:text-tide-600">Home</a>
+    </li>
+    @for (item of items; track item.label; let last = $last) {
+      <li class="flex items-center gap-1.5">
+        <svg class="h-3.5 w-3.5 text-slate-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        @if (item.link && !last) {
+          <a [routerLink]="item.link" class="transition hover:text-tide-600">{{ item.label }}</a>
+        } @else {
+          <span class="font-medium text-abyss-900" [attr.aria-current]="last ? 'page' : null">{{ item.label }}</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>
