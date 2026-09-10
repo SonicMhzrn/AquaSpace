@@ -5,6 +5,9 @@
 /dist
 /out-tsc
 
+# Angular cache
+/.angular
+
 # IDE
 .vscode/
 .idea/
