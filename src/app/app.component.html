@@ -1,0 +1,13 @@
+<div class="flex min-h-screen flex-col bg-slate-50">
+  @if (!isAdminRoute()) {
+    <app-header />
+  }
+  <main class="flex-1">
+    <router-outlet />
+  </main>
+  @if (!isAdminRoute()) {
+    <app-footer />
+  }
+</div>
+<app-toast position="bottom-right" />
+<app-confirm-dialog />

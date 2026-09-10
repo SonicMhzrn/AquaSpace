@@ -1,0 +1,21 @@
+<div class="flex h-screen overflow-hidden bg-slate-100">
+  <!-- desktop sidebar -->
+  <div class="hidden lg:block">
+    <app-admin-sidebar />
+  </div>
+
+  <!-- mobile sidebar -->
+  @if (mobileSidebarOpen()) {
+    <div class="fixed inset-0 z-40 bg-abyss-950/60 lg:hidden" (click)="mobileSidebarOpen.set(false)"></div>
+    <div class="fixed inset-y-0 left-0 z-50 lg:hidden">
+      <app-admin-sidebar />
+    </div>
+  }
+
+  <div class="flex flex-1 flex-col overflow-hidden">
+    <app-admin-header (menuToggle)="mobileSidebarOpen.set(true)" />
+    <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <router-outlet />
+    </div>
+  </div>
+</div>

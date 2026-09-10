@@ -1,0 +1,113 @@
+<div class="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="flex items-center gap-4">
+    <span class="flex h-16 w-16 items-center justify-center rounded-full bg-tide-gradient text-xl font-bold text-white">{{ initials }}</span>
+    <div>
+      <h1 class="font-display text-2xl font-semibold text-abyss-900">{{ customer?.firstName }} {{ customer?.lastName }}</h1>
+      <p class="text-sm text-slate-500">{{ customer?.email }}</p>
+    </div>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-4">
+    <!-- side nav -->
+    <nav class="space-y-1 lg:col-span-1">
+      <button type="button" (click)="activeTab = 'info'" [class.bg-tide-50]="activeTab === 'info'" [class.text-tide-700]="activeTab === 'info'"
+        class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Personal Information</button>
+      <button type="button" (click)="activeTab = 'addresses'" [class.bg-tide-50]="activeTab === 'addresses'" [class.text-tide-700]="activeTab === 'addresses'"
+        class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Saved Addresses</button>
+      <button type="button" (click)="activeTab = 'security'" [class.bg-tide-50]="activeTab === 'security'" [class.text-tide-700]="activeTab === 'security'"
+        class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Change Password</button>
+      <button type="button" (click)="activeTab = 'notifications'" [class.bg-tide-50]="activeTab === 'notifications'" [class.text-tide-700]="activeTab === 'notifications'"
+        class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Notifications</button>
+      <a routerLink="/orders" class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">My Orders ({{ orderSvc.getMyOrders().length }})</a>
+      <a routerLink="/wishlist" class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50">Wishlist ({{ wishlistSvc.count() }})</a>
+      <button type="button" (click)="logout()" class="block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium text-red-500 transition hover:bg-red-50">Logout</button>
+    </nav>
+
+    <!-- content -->
+    <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-100 lg:col-span-3">
+      @if (activeTab === 'info') {
+        <h2 class="font-display text-lg font-semibold text-abyss-900">Personal Information</h2>
+        <form [formGroup]="infoForm" (ngSubmit)="saveInfo()" class="mt-5 space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-abyss-900">First Name</label>
+              <input type="text" formControlName="firstName" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+            </div>
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-abyss-900">Last Name</label>
+              <input type="text" formControlName="lastName" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+            </div>
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Phone</label>
+            <input type="tel" formControlName="phone" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Email</label>
+            <input type="email" [value]="customer?.email" disabled class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-400" />
+          </div>
+          <button type="submit" [disabled]="savingInfo()" class="rounded-xl bg-tide-gradient px-6 py-2.5 text-sm font-semibold text-white shadow transition hover:shadow-glow disabled:opacity-60">
+            {{ savingInfo() ? 'Saving…' : 'Save Changes' }}
+          </button>
+        </form>
+      }
+
+      @if (activeTab === 'addresses') {
+        <h2 class="font-display text-lg font-semibold text-abyss-900">Saved Addresses</h2>
+        @if (customer?.addresses?.length) {
+          <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            @for (addr of customer?.addresses; track $index) {
+              <div class="rounded-xl border border-slate-200 p-4 text-sm">
+                <p class="font-semibold text-abyss-900">{{ addr.fullName }}</p>
+                <p class="mt-1 text-slate-500">{{ addr.addressLine }}</p>
+                <p class="text-slate-500">{{ addr.city }}, {{ addr.state }} {{ addr.postalCode }}</p>
+                <p class="text-slate-500">{{ addr.country }}</p>
+                <p class="mt-1 text-slate-500">{{ addr.phone }}</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="mt-4 text-sm text-slate-500">No saved addresses yet. You can add one during checkout.</p>
+        }
+      }
+
+      @if (activeTab === 'security') {
+        <h2 class="font-display text-lg font-semibold text-abyss-900">Change Password</h2>
+        @if (passwordError()) {
+          <div class="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{{ passwordError() }}</div>
+        }
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="mt-5 max-w-sm space-y-4">
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Current Password</label>
+            <input type="password" formControlName="currentPassword" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">New Password</label>
+            <input type="password" formControlName="newPassword" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <button type="submit" [disabled]="changingPassword()" class="rounded-xl bg-tide-gradient px-6 py-2.5 text-sm font-semibold text-white shadow transition hover:shadow-glow disabled:opacity-60">
+            {{ changingPassword() ? 'Updating…' : 'Update Password' }}
+          </button>
+        </form>
+      }
+
+      @if (activeTab === 'notifications') {
+        <h2 class="font-display text-lg font-semibold text-abyss-900">Notification Preferences</h2>
+        <div class="mt-5 space-y-4">
+          <label class="flex items-center justify-between rounded-xl border border-slate-200 p-4">
+            <span class="text-sm font-medium text-abyss-900">Order status updates</span>
+            <input type="checkbox" [(ngModel)]="notificationPrefs.orderUpdates" [ngModelOptions]="{standalone: true}" class="h-5 w-5 rounded border-slate-300 text-tide-600 focus:ring-tide-400" />
+          </label>
+          <label class="flex items-center justify-between rounded-xl border border-slate-200 p-4">
+            <span class="text-sm font-medium text-abyss-900">Promotions &amp; offers</span>
+            <input type="checkbox" [(ngModel)]="notificationPrefs.promotions" [ngModelOptions]="{standalone: true}" class="h-5 w-5 rounded border-slate-300 text-tide-600 focus:ring-tide-400" />
+          </label>
+          <label class="flex items-center justify-between rounded-xl border border-slate-200 p-4">
+            <span class="text-sm font-medium text-abyss-900">Newsletter</span>
+            <input type="checkbox" [(ngModel)]="notificationPrefs.newsletter" [ngModelOptions]="{standalone: true}" class="h-5 w-5 rounded border-slate-300 text-tide-600 focus:ring-tide-400" />
+          </label>
+        </div>
+      }
+    </div>
+  </div>
+</div>

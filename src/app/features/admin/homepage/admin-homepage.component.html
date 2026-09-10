@@ -1,0 +1,31 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="font-display text-2xl font-semibold text-abyss-900">Homepage Management</h1>
+    <p class="mt-1 text-sm text-slate-500">Enable, disable, and reorder the sections shown on your storefront homepage.</p>
+  </div>
+
+  <div class="space-y-3">
+    @for (section of orderedSections(); track section.id; let i = $index) {
+      <div class="flex items-center gap-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
+        <div class="flex flex-col gap-1">
+          <button type="button" (click)="moveUp(i)" [disabled]="i === 0" class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30" aria-label="Move up">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5-5 5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" (click)="moveDown(i)" [disabled]="i === orderedSections().length - 1" class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30" aria-label="Move down">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="flex-1">
+          <p class="font-display text-sm font-semibold text-abyss-900">{{ section.title }}</p>
+          <p class="text-xs uppercase tracking-wide text-slate-400">{{ section.type }}</p>
+        </div>
+        <button type="button" (click)="toggle(section.id)"
+          class="relative h-6 w-11 rounded-full transition"
+          [class.bg-tide-gradient]="section.enabled" [class.bg-slate-200]="!section.enabled"
+          [attr.aria-pressed]="section.enabled" aria-label="Toggle section visibility">
+          <span class="absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition" [class.left-5]="section.enabled" [class.left-0.5]="!section.enabled"></span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

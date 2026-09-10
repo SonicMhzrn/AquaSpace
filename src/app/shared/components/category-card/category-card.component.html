@@ -1,0 +1,15 @@
+<a [routerLink]="['/category', category.slug]"
+  class="group relative flex flex-col overflow-hidden rounded-2xl bg-abyss-900 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-deep">
+  <div class="relative aspect-[4/3] w-full overflow-hidden">
+    <img [src]="category.image" [alt]="category.name" loading="lazy"
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+    <div class="absolute inset-0 bg-gradient-to-t from-abyss-950/90 via-abyss-950/20 to-transparent"></div>
+  </div>
+  <div class="absolute inset-x-0 bottom-0 p-4">
+    <h3 class="font-display text-lg font-semibold text-white">{{ category.name }}</h3>
+    <p class="mt-1 flex items-center gap-1 text-xs font-medium text-tide-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      Shop now
+      <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </p>
+  </div>
+</a>

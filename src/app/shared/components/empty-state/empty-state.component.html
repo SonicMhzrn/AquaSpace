@@ -1,0 +1,31 @@
+<div class="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/60 px-6 py-16 text-center">
+  <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-tide-50 text-tide-600">
+    @switch (icon) {
+      @case ('search') {
+        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+      }
+      @case ('cart') {
+        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.4 12.4a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20 8H6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="21" r="1"/><circle cx="17" cy="21" r="1"/></svg>
+      }
+      @case ('heart') {
+        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.35-9.5-8.8C.7 8 2 4.5 5.6 4.5c2 0 3.4 1.2 4.4 2.7 1-1.5 2.4-2.7 4.4-2.7 3.6 0 4.9 3.5 3.1 6.7C19 15.65 12 20 12 20z"/></svg>
+      }
+      @case ('error') {
+        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4m0 4h.01M10.3 3.9L2.6 17a1.5 1.5 0 0 0 1.3 2.3h16.2a1.5 1.5 0 0 0 1.3-2.3L13.7 3.9a1.5 1.5 0 0 0-2.6 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      }
+      @default {
+        <svg class="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8l9-5 9 5-9 5-9-5z"/><path d="M3 8v8l9 5 9-5V8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      }
+    }
+  </div>
+  <h3 class="font-display text-lg font-semibold text-abyss-900">{{ title }}</h3>
+  @if (description) {
+    <p class="mt-1.5 max-w-sm text-sm text-slate-500">{{ description }}</p>
+  }
+  @if (actionLabel && actionLink) {
+    <a [routerLink]="actionLink"
+      class="mt-5 inline-flex items-center justify-center rounded-xl bg-tide-gradient px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-glow">
+      {{ actionLabel }}
+    </a>
+  }
+</div>

@@ -1,0 +1,174 @@
+<div class="min-h-screen w-full space-y-16 bg-slate-50 px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+
+  <!-- HERO -->
+  @if (IsEnabled('hero')) {
+    <app-hero-banner [banner]="HeroBanner()" />
+    <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      @for (stat of HeroStats; track stat.Label) {
+        <div class="rounded-2xl bg-white p-4 text-center shadow-sm ring-1 ring-slate-100">
+          <p class="font-display text-xl font-semibold text-abyss-900 sm:text-2xl">{{ stat.Value }}</p>
+          <p class="mt-1 text-xs text-slate-500">{{ stat.Label }}</p>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- CATEGORIES -->
+  @if (IsEnabled('categories')) {
+    <section>
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600">Browse the Shop</p>
+          <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('categories', 'Shop by Category') }}</h2>
+        </div>
+        <a routerLink="/products" class="hidden text-sm font-semibold text-tide-600 hover:text-tide-700 sm:block">View all →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        @for (cat of FeaturedCategories(); track cat.id) {
+          <app-category-card [category]="cat" />
+        }
+      </div>
+    </section>
+  }
+
+  <!-- FEATURED PRODUCTS -->
+  @if (IsEnabled('featured-products')) {
+    <section>
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600">Handpicked for You</p>
+          <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('featured-products', 'Featured Products') }}</h2>
+        </div>
+        <a routerLink="/products" class="hidden text-sm font-semibold text-tide-600 hover:text-tide-700 sm:block">View all →</a>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        @for (p of FeaturedProducts(); track p.id) {
+          <app-product-card [product]="p" />
+        }
+      </div>
+    </section>
+  }
+
+  <!-- NEW ARRIVALS -->
+  @if (IsEnabled('new-arrivals')) {
+    <section>
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600">Just Landed</p>
+          <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('new-arrivals', 'New Arrivals') }}</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        @for (p of NewArrivals(); track p.id) {
+          <app-product-card [product]="p" />
+        }
+      </div>
+    </section>
+  }
+
+  <!-- PROMOTION -->
+  @if (IsEnabled('promotion') && PromoBanner(); as banner) {
+    <section>
+      <app-promo-banner [banner]="banner" />
+    </section>
+  }
+
+  <!-- BEST SELLERS -->
+  @if (IsEnabled('best-sellers')) {
+    <section>
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600">Aquarist Favorites</p>
+          <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('best-sellers', 'Best Sellers') }}</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        @for (p of BestSellers(); track p.id) {
+          <app-product-card [product]="p" />
+        }
+      </div>
+    </section>
+  }
+
+  <!-- WHY CHOOSE US -->
+  @if (IsEnabled('why-us')) {
+    <section class="rounded-3xl bg-abyss-950 px-6 py-14 sm:px-12">
+      <div class="mb-10 text-center">
+        <p class="text-sm font-medium text-tide-300">Our Promise</p>
+        <h2 class="font-display text-2xl font-semibold text-white sm:text-3xl">{{ SectionTitle('why-us', 'Why Choose AquaShop') }}</h2>
+      </div>
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        @for (point of WhyUsPoints; track point.Title) {
+          <div class="text-center">
+            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-tide-300">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="font-display text-base font-semibold text-white">{{ point.Title }}</h3>
+            <p class="mt-2 text-sm text-slate-400">{{ point.Description }}</p>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- REVIEWS -->
+  @if (IsEnabled('reviews') && RecentReviews().length > 0) {
+    <section>
+      <div class="mb-6 text-center">
+        <p class="text-sm font-medium text-tide-600">Trusted by Aquarists</p>
+        <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('reviews', 'What Aquarists Are Saying') }}</h2>
+      </div>
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        @for (rev of RecentReviews(); track rev.id) {
+          <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+            <app-rating [value]="rev.rating" size="md" />
+            <p class="mt-3 line-clamp-3 text-sm text-slate-600">"{{ rev.comment }}"</p>
+            <p class="mt-4 text-sm font-semibold text-abyss-900">{{ rev.customerName }}</p>
+            @if (rev.verifiedPurchase) {
+              <p class="text-xs text-tide-600">Verified Purchase</p>
+            }
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- BLOG -->
+  @if (IsEnabled('blog') && RecentPosts().length > 0) {
+    <section>
+      <div class="mb-6 flex items-end justify-between">
+        <div>
+          <p class="text-sm font-medium text-tide-600">Learn &amp; Grow</p>
+          <h2 class="font-display text-2xl font-semibold text-abyss-900 sm:text-3xl">{{ SectionTitle('blog', 'From the Fish Care Library') }}</h2>
+        </div>
+        <a routerLink="/blog" class="hidden text-sm font-semibold text-tide-600 hover:text-tide-700 sm:block">View all →</a>
+      </div>
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+        @for (post of RecentPosts(); track post.id) {
+          <a [routerLink]="['/blog', post.slug]" class="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:shadow-lg">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img [src]="post.image" [alt]="post.title" loading="lazy" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+            </div>
+            <div class="p-4">
+              <p class="text-xs font-medium uppercase tracking-wide text-tide-600">{{ post.category }}</p>
+              <h3 class="mt-1 line-clamp-2 font-display text-base font-semibold text-abyss-900">{{ post.title }}</h3>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- NEWSLETTER -->
+  @if (IsEnabled('newsletter')) {
+    <section class="rounded-3xl bg-gradient-to-br from-abyss-900 via-abyss-950 to-abyss-950 px-6 py-14 text-center sm:px-12">
+      <h2 class="font-display text-2xl font-semibold text-white sm:text-3xl">{{ SectionTitle('newsletter', 'Stay in the Current') }}</h2>
+      <p class="mx-auto mt-3 max-w-md text-sm text-slate-400">Tips, offers, and new arrivals in your inbox — no spam, ever.</p>
+      <form (ngSubmit)="Subscribe()" class="mx-auto mt-6 flex max-w-md gap-2">
+        <input type="email" [(ngModel)]="NewsletterEmail" name="newsletterEmail" required placeholder="you@example.com"
+          class="w-full min-w-0 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-500/30" />
+        <button type="submit" class="shrink-0 rounded-xl bg-tide-gradient px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-glow">Subscribe</button>
+      </form>
+    </section>
+  }
+</div>

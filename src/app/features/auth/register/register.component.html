@@ -1,0 +1,72 @@
+<div class="flex min-h-[70vh] items-center justify-center bg-depth-gradient px-4 py-16">
+  <div class="w-full max-w-lg rounded-3xl bg-white/95 p-8 shadow-deep backdrop-blur">
+    <h1 class="font-display text-2xl font-semibold text-abyss-900">Create Your Account</h1>
+    <p class="mt-1 text-sm text-slate-500">Join AquaShop for faster checkout and order tracking.</p>
+
+    @if (errorMessage()) {
+      <div class="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">{{ errorMessage() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-6 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-abyss-900">First Name</label>
+          <input type="text" formControlName="firstName" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-abyss-900">Last Name</label>
+          <input type="text" formControlName="lastName" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+        </div>
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-abyss-900">Email</label>
+        <input type="email" formControlName="email" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+        @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <p class="mt-1 text-xs text-red-500">Enter a valid email address.</p>
+        }
+      </div>
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-abyss-900">Phone</label>
+        <input type="tel" formControlName="phone" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-abyss-900">Password</label>
+          <input type="password" formControlName="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+          @if (form.get('password')?.invalid && form.get('password')?.touched) {
+            <p class="mt-1 text-xs text-red-500">At least 6 characters.</p>
+          }
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-abyss-900">Confirm Password</label>
+          <input type="password" formControlName="confirmPassword" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+        </div>
+      </div>
+      @if (form.errors?.['passwordMismatch'] && form.get('confirmPassword')?.touched) {
+        <p class="text-xs text-red-500">Passwords do not match.</p>
+      }
+
+      <div>
+        <label class="mb-1.5 block text-sm font-medium text-abyss-900">Address <span class="font-normal text-slate-400">(optional)</span></label>
+        <input type="text" formControlName="addressLine" placeholder="Street address" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none focus:ring-2 focus:ring-tide-200" />
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <input type="text" formControlName="city" placeholder="City" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+        <input type="text" formControlName="state" placeholder="State" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+        <input type="text" formControlName="postalCode" placeholder="Postal code" class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+      </div>
+
+      <button type="submit" [disabled]="submitting()"
+        class="w-full rounded-xl bg-tide-gradient py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-60">
+        {{ submitting() ? 'Creating account…' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-slate-500">
+      Already have an account? <a routerLink="/login" class="font-semibold text-tide-600 hover:text-tide-700">Log In</a>
+    </p>
+  </div>
+</div>

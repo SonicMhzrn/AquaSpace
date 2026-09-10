@@ -1,0 +1,29 @@
+<div class="relative overflow-hidden rounded-3xl bg-depth-gradient shadow-deep">
+  <div class="absolute inset-0 bg-surface-glow"></div>
+  <img [src]="banner.image" [alt]="banner.title"
+    class="absolute inset-0 h-full w-full object-cover opacity-30 mix-blend-luminosity" loading="eager" />
+  <div class="absolute inset-0 bg-gradient-to-t from-abyss-950 via-abyss-950/70 to-transparent"></div>
+
+  <!-- decorative rising bubbles -->
+  <span class="pointer-events-none absolute bottom-4 left-[15%] h-2 w-2 rounded-full bg-tide-300/60 animate-rise"></span>
+  <span class="pointer-events-none absolute bottom-4 left-[45%] h-1.5 w-1.5 rounded-full bg-tide-200/50 animate-rise [animation-delay:1.5s]"></span>
+  <span class="pointer-events-none absolute bottom-4 left-[75%] h-2.5 w-2.5 rounded-full bg-tide-300/40 animate-rise [animation-delay:3s]"></span>
+
+  <div class="relative z-10 flex min-h-[420px] flex-col justify-center px-6 py-16 sm:px-12 md:min-h-[480px] md:px-16">
+    <p class="mb-3 text-sm font-medium tracking-wide text-tide-300">{{ banner.subtitle }}</p>
+    <h1 class="max-w-xl font-display text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
+      {{ banner.title }}
+    </h1>
+    <p class="mt-5 max-w-md text-base text-slate-300">{{ banner.description }}</p>
+    <div class="mt-8 flex flex-wrap items-center gap-4">
+      <a [routerLink]="banner.buttonLink"
+        class="inline-flex items-center justify-center rounded-xl bg-tide-gradient px-6 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow">
+        {{ banner.buttonText }}
+      </a>
+      <a routerLink="/fish-care"
+        class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/10">
+        Explore Fish Care
+      </a>
+    </div>
+  </div>
+</div>

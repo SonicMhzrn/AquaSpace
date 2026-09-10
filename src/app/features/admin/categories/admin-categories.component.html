@@ -1,0 +1,106 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="font-display text-2xl font-semibold text-abyss-900">Categories</h1>
+    <button type="button" (click)="openAdd()" class="inline-flex items-center gap-2 rounded-xl bg-tide-gradient px-4 py-2.5 text-sm font-semibold text-white shadow transition hover:shadow-glow">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4v12M4 10h12" stroke-linecap="round"/></svg>
+      Add Category
+    </button>
+  </div>
+
+  <div class="space-y-4">
+    @for (cat of topLevel; track cat.id) {
+      <div class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-100">
+        <div class="flex items-center gap-4">
+          <img [src]="cat.image" [alt]="cat.name" class="h-14 w-14 rounded-xl object-cover" />
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <p class="font-display text-base font-semibold text-abyss-900">{{ cat.name }}</p>
+              @if (cat.isFeatured) {
+                <span class="rounded-full bg-tide-50 px-2 py-0.5 text-[10px] font-semibold text-tide-700">Featured</span>
+              }
+            </div>
+            <p class="line-clamp-1 text-sm text-slate-500">{{ cat.description }}</p>
+          </div>
+          <button type="button" (click)="toggleActive(cat)" class="rounded-full px-2.5 py-1 text-xs font-semibold" [class.bg-tide-50]="cat.isActive" [class.text-tide-700]="cat.isActive" [class.bg-slate-100]="!cat.isActive" [class.text-slate-500]="!cat.isActive">
+            {{ cat.isActive ? 'Active' : 'Inactive' }}
+          </button>
+          <button type="button" (click)="openEdit(cat)" class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-tide-600" aria-label="Edit">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+          </button>
+          <button type="button" (click)="remove(cat)" class="rounded-lg p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-500" aria-label="Delete">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-.8 12.2A2 2 0 0 1 14.2 21H9.8a2 2 0 0 1-2-1.8L7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        @if (childrenOf(cat.id).length > 0) {
+          <div class="mt-4 space-y-2 border-t border-slate-100 pt-4 pl-6">
+            @for (sub of childrenOf(cat.id); track sub.id) {
+              <div class="flex items-center gap-3">
+                <img [src]="sub.image" [alt]="sub.name" class="h-9 w-9 rounded-lg object-cover" />
+                <span class="flex-1 text-sm text-abyss-900">{{ sub.name }}</span>
+                <button type="button" (click)="toggleActive(sub)" class="rounded-full px-2 py-0.5 text-[11px] font-semibold" [class.bg-tide-50]="sub.isActive" [class.text-tide-700]="sub.isActive" [class.bg-slate-100]="!sub.isActive" [class.text-slate-500]="!sub.isActive">
+                  {{ sub.isActive ? 'Active' : 'Inactive' }}
+                </button>
+                <button type="button" (click)="openEdit(sub)" class="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-tide-600" aria-label="Edit">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+                </button>
+                <button type="button" (click)="remove(sub)" class="rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500" aria-label="Delete">
+                  <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-.8 12.2A2 2 0 0 1 14.2 21H9.8a2 2 0 0 1-2-1.8L7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  @if (showForm()) {
+    <div class="fixed inset-0 z-[90] flex items-center justify-center bg-abyss-950/60 px-4 backdrop-blur-sm" role="dialog" aria-modal="true">
+      <div class="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-deep">
+        <h2 class="font-display text-lg font-semibold text-abyss-900">{{ editingId() ? 'Edit Category' : 'Add Category' }}</h2>
+        <form [formGroup]="form" (ngSubmit)="save()" class="mt-4 space-y-4">
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Name</label>
+            <input type="text" formControlName="name" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Slug</label>
+            <input type="text" formControlName="slug" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Description</label>
+            <textarea formControlName="description" rows="2" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none"></textarea>
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Image URL</label>
+            <input type="text" formControlName="image" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-abyss-900">Parent Category <span class="font-normal text-slate-400">(optional)</span></label>
+            <select formControlName="parentId" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none">
+              <option value="">None (top-level)</option>
+              @for (cat of topLevel; track cat.id) {
+                <option [value]="cat.id">{{ cat.name }}</option>
+              }
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-abyss-900">Display Order</label>
+              <input type="number" formControlName="displayOrder" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none" />
+            </div>
+            <label class="mt-7 flex items-center gap-2 text-sm font-medium text-abyss-900">
+              <input type="checkbox" formControlName="isFeatured" class="h-4 w-4 rounded border-slate-300 text-tide-600 focus:ring-tide-400" />
+              Featured
+            </label>
+          </div>
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" (click)="cancel()" class="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Cancel</button>
+            <button type="submit" class="rounded-xl bg-tide-gradient px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:shadow-glow">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>

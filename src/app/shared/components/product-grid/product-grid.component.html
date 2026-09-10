@@ -1,0 +1,11 @@
+@if (loading) {
+  <app-loading variant="grid" [count]="8" />
+} @else if (products.length === 0) {
+  <app-empty-state icon="search" [title]="emptyTitle" [description]="emptyDescription" />
+} @else {
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    @for (product of products; track trackById($index, product)) {
+      <app-product-card [product]="product" />
+    }
+  </div>
+}
