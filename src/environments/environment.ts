@@ -4,7 +4,7 @@ export const environment = {
   // Point this at the future ASP.NET Core API base URL, e.g. 'https://api.aquashop.com/api'
   apiUrl: '',
   appName: 'AquaShop',
-  currency: 'INR',
+  currency: 'NPR',
   currencySymbol: 'Rs.',
   taxRatePercent: 7,
 };
