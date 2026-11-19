@@ -1,7 +1,7 @@
 <nav aria-label="Breadcrumb" class="text-sm">
-  <ol class="flex flex-wrap items-center gap-1.5 text-slate-500">
+  <ol class="flex flex-wrap items-center gap-1.5 text-slate-300">
     <li>
-      <a routerLink="/" class="transition hover:text-tide-600">Home</a>
+      <a routerLink="/" class="transition hover:text-tide-600 font-bold">Home</a>
     </li>
     @for (item of items; track item.label; let last = $last) {
       <li class="flex items-center gap-1.5">
@@ -9,7 +9,7 @@
         @if (item.link && !last) {
           <a [routerLink]="item.link" class="transition hover:text-tide-600">{{ item.label }}</a>
         } @else {
-          <span class="font-medium text-abyss-900" [attr.aria-current]="last ? 'page' : null">{{ item.label }}</span>
+          <span class="font-bold text-slate-300" [attr.aria-current]="last ? 'page' : null">{{ item.label }}</span>
         }
       </li>
     }

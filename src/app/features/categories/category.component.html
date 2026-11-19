@@ -33,7 +33,7 @@
       }
 
       <div class="mb-5 flex items-center justify-between">
-        <p class="text-sm text-slate-500">{{ allResults().length }} product{{ allResults().length === 1 ? '' : 's' }}</p>
+        <p class="text-lg font-bold text-slate-500">{{ allResults().length }} product{{ allResults().length === 1 ? '' : 's' }}</p>
         <select [(ngModel)]="sortBy" (ngModelChange)="onSortChange()"
           class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm focus:border-tide-400 focus:outline-none">
           <option value="newest">Newest</option>

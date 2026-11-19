@@ -31,6 +31,7 @@ export class ProductDetailComponent implements OnInit {
   activeTab: 'description' | 'specifications' | 'reviews' = 'description';
   relatedProducts: Product[] = [];
   recentlyViewed: Product[] = [];
+  isAddingToCart = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,7 +42,7 @@ export class ProductDetailComponent implements OnInit {
     public wishlistSvc: WishlistService,
     private seo: SeoService,
     private toast: ToastService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -79,10 +80,20 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToCart(): void {
-    if (!this.product) return;
+    if (!this.product || this.isAddingToCart) return;
+
     const result = this.cartSvc.add(this.product.id, this.quantity);
-    if (result.ok) this.toast.success(`${this.quantity} × ${this.product.name} added to cart`);
-    else this.toast.error(result.message ?? 'Could not add to cart');
+
+    if (result.ok) {
+      this.isAddingToCart = true;
+      this.toast.success(`${this.quantity} × ${this.product.name} added to cart`);
+
+      setTimeout(() => {
+        this.isAddingToCart = false;
+      }, 2000);
+    } else {
+      this.toast.error(result.message ?? 'Could not add to cart');
+    }
   }
 
   buyNow(): void {

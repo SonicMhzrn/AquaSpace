@@ -48,10 +48,63 @@
 
         <div class="mt-6 flex flex-wrap items-center gap-4">
           <app-quantity-selector [(value)]="quantity" [max]="p.trackInventory ? p.stockQuantity : 99" />
-          <button type="button" (click)="addToCart()" [disabled]="stockStatus === 'Out of Stock'"
-            class="inline-flex items-center justify-center rounded-xl bg-tide-gradient px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-50">
-            Add to Cart
-          </button>
+          <button
+  type="button"
+  (click)="addToCart()"
+  [disabled]="stockStatus === 'Out of Stock' || isAddingToCart"
+  class="group relative inline-flex h-[50px] w-[190px] items-center justify-center overflow-hidden rounded-xl bg-tide-gradient px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+  [class.cart-animating]="isAddingToCart"
+>
+  <!-- Add to Cart Text -->
+  <span
+    class="absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap transition-none"
+    [class.cart-text-hide]="isAddingToCart"
+  >
+    Add to Cart
+  </span>
+
+  <!-- Added Text -->
+  <span
+    class="absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap opacity-0"
+    [class.cart-text-show]="isAddingToCart"
+  >
+    Added
+  </span>
+
+  <!-- Shopping Cart -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="2"
+    stroke="currentColor"
+    class="pointer-events-none absolute left-[-10%] top-1/2 z-[2] h-7 w-7 -translate-x-1/2 -translate-y-1/2"
+    [class.cart-icon-move]="isAddingToCart"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437m0 0L6.75 14.25a2.25 2.25 0 0 0 2.182 1.7h7.136a2.25 2.25 0 0 0 2.182-1.7l1.642-6.135a.75.75 0 0 0-.726-.944H5.106Zm3.75 13.5a1.125 1.125 0 1 1-2.25 0 1.125 1.125 0 0 1 2.25 0Zm9.75 0a1.125 1.125 0 1 1-2.25 0 1.125 1.125 0 0 1 2.25 0Z"
+    />
+  </svg>
+
+  <!-- Package -->
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke-width="2"
+    stroke="currentColor"
+    class="pointer-events-none absolute left-[52%] top-[-20%] z-[3] h-5 w-5 -translate-x-1/2 -translate-y-1/2"
+    [class.cart-box-move]="isAddingToCart"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="m21 7.5-9-5.25L3 7.5m18 0-9 5.25M21 7.5v9l-9 5.25m0-9.25L3 7.5m9 5.25v9m-9-14.25v9l9 5.25"
+    />
+  </svg>
+</button>
           <button type="button" (click)="buyNow()" [disabled]="stockStatus === 'Out of Stock'"
             class="inline-flex items-center justify-center rounded-xl border border-abyss-900 px-6 py-3 text-sm font-semibold text-abyss-900 transition hover:bg-abyss-900 hover:text-white disabled:cursor-not-allowed disabled:opacity-50">
             Buy Now
